@@ -7,7 +7,7 @@
 
 This is a secondary userland exploit for 3DS home menu. It can be triggered from cold boot but needs user interaction by tapping the home icon on the top left of the bottom screen.<br><br>
 
-Note: This is developer curiosity at the moment due to the initial intended purpose -- launching SAFE_MODE sysupdater without functioning shoulder button(s) -- is likely impossible, even with the SAFE_MODE boolean not set. This exploit could still be useful later on if an arm11 kernel sploit shows up, as it could help something like that attack arm9 in SAFE_MODE.
+Note: This is developer proof-of-concept at the moment due to the initial intended purpose -- launching SAFE_MODE sysupdater without functioning shoulder button(s) -- likely being impossible, even with the SAFE_MODE boolean not set. This exploit could still be useful later on if an arm11 kernel sploit shows up, as it could help something like that attack arm9 in SAFE_MODE.
 
 ## What's needed
 
@@ -20,10 +20,7 @@ And a userland entrypoint with cfg:s or cfg:i to launch the 3dsx installer.
 
 ## Directions 
 
-1) Build the project to create menuhax67_installer.3dsx. A release will not be provided because this is a developer toy and not intended for the general masses.
-2) Download the appropriate *hax ropbin for your system/region (or a make one of your own) and rename it Launcher.dat. Place it in the SD root.
-3) Run the .3dsx installer and install the exploit. The brightness will change to the highest setting, this is normal. Parental controls will also be overwritten.
-4) With home menu displayed, tap the home icon on the top left of the bottom screen. The exploit will trigger.
+Check the release archive. Stay away if you're not a developer.
 
 ## Exploit details
 
@@ -43,3 +40,7 @@ A: Memes, of course. I'll leave it as an exercise for the reader to decipher wha
 
 Q: Why you kill parental setting? Why you hate parent?<br>
 A: There aren't a lot of config blocks that are large enough to fit an sd loading rop chain (and also get loaded by home menu), and parental controls was just big enough for that purpose. And parental controls suck, no offense to parents out there.
+
+Q: Why did you choose Launcher.dat for the sd payload name? That erases my Gateway launcher.
+A: Probably for the same reason Gateway did, to save enough space to fit a ropchain where I want.
+RIP your Gateway launcher but GW3DS is really dead already. Get some proper cfw for Lenny's sake.
