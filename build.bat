@@ -13,5 +13,10 @@ cp rop_gadgets_jpn.h rop_gadgets.h
 make REGION="JPN"
 cp rop_payload.bin menuhax67_installer/data/rop_jpn.bin
 
+make clean
+cp rop_gadgets_kor.h rop_gadgets.h 
+make REGION="KOR"
+cp rop_payload.bin menuhax67_installer/data/rop_kor.bin
+
 cd menuhax67_installer && make clean && make
 pause

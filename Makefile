@@ -15,7 +15,9 @@ endif
 ifeq ($(REGION),JPN)
 	BASE_ADDR := 0x00347a10
 endif
-
+ifeq ($(REGION),KOR)
+	BASE_ADDR := 0x00346a10
+endif
 
 all:	rop_payload.bin
 

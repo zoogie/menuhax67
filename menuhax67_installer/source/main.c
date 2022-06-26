@@ -6,6 +6,7 @@
 #include "rop_usa_bin.h"
 #include "rop_eur_bin.h"
 #include "rop_jpn_bin.h"
+#include "rop_kor_bin.h"
 
 u8 *data; 
 
@@ -20,7 +21,15 @@ Result menuhax67(){
 	u8 region=0xff;
 	bool isnew=*(u32*)0x1FF80030 == 6;
 	FS_ProductInfo info;
-	u64 menus[3]={0x0004003000008202LL,0x0004003000008F02LL,0x0004003000009802LL};
+	u64 menus[7]={  //index will correspond to region value
+		0x0004003000008202LL, //JPN
+		0x0004003000008F02LL, //USA
+		0x0004003000009802LL, //EUR
+		0x0004003000009802LL, //AUS same as EUR
+		0,                    //CHN
+		0x000400300000A902LL, //KOR
+		0                     //TWN
+		};
 	u32 rop[0xC0/4]={0};
 	u32 fail=1;
 	u32 procid=0;
@@ -54,12 +63,21 @@ Result menuhax67(){
 			return 3;
 		}
 	}
-	else if(region==2){
+	else if(region==2 || region==3){
 		base_addr=0x00347a10;
 		memcpy(rop, rop_eur_bin, rop_eur_bin_size); 
 		printf("EUR\n");
 		if(menuversion != 29){
 			printf("Error: unsupported menu r%d, expected r29\n", menuversion);
+			return 3;
+		}
+	}
+	else if(region==5){
+		base_addr=0x00346a10;
+		memcpy(rop, rop_kor_bin, rop_kor_bin_size); 
+		printf("KOR\n");
+		if(menuversion != 15){
+			printf("Error: unsupported menu r%d, expected r15\n", menuversion);
 			return 3;
 		}
 	}
@@ -131,8 +149,8 @@ int cursor=0;
 int menu(u32 n){
 	consoleClear();
 	
-	printf("menuhax67_installer v0.0 - zoogie\n");
-	printf("- For developers only -\n\nCAUTION: This will crank your brightness up to\nfull and erase parental controls\n\n");
+	printf("menuhax67_installer v1.0 - zoogie\n");
+	printf("CAUTION: This will crank your brightness up to\nfull and erase parental controls\n\n");
 
 	char *choices[]={
 		"INSTALL menuhax67",
