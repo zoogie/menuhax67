@@ -13,9 +13,9 @@ Note: This is developer proof-of-concept at the moment due to the initial intend
 
 A 3ds (old or new) on firmwares:<br>
 ```
-11.7.0-X -> 11.15.0-X for USA, JAPAN
+11.7.0-X  -> 11.15.0-X for USA, JAPAN
 11.10.0-X -> 11.15.0-X for EUROPE
-11.5.0-X -> 11.15.0-X for KOREA
+11.5.0-X  -> 11.15.0-X for KOREA
 ```
 And a userland entrypoint with cfg:s or cfg:i to launch the 3dsx installer.
 

@@ -116,9 +116,9 @@ Result menuhax67(){
 	
 	res = CFG_SetConfigInfoBlk4(0xc0, 0xc0000, rop);//36857a10 08557a10
 	
-	res = CFG_UpdateConfigSavegame();
-	printf("done %08X\n", (int)res);
-	
+	res = CFG_UpdateConfigSavegame();  //note that this is the cfg:i version of this function, so it won't work with anything but mset
+	printf("done %08X\n", (int)res);   //easy workaround is to patch header 00 00 03 08 --> 00 00 03 04 in the binary (first occurrence)
+	                                   //not really in the mood to make a local libctru or bother the libctru maintainers
 	return 0;
 }
 
@@ -149,7 +149,7 @@ int cursor=0;
 int menu(u32 n){
 	consoleClear();
 	
-	printf("menuhax67_installer v1.0 - zoogie\n");
+	printf("menuhax67_installer v1.0 - zoogie\n\n");
 	printf("CAUTION: This will crank your brightness up to\nfull and erase parental controls\n\n");
 
 	char *choices[]={
