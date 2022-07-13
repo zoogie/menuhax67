@@ -9,6 +9,8 @@
 #include "rop_kor_bin.h"
 
 u8 *data; 
+int iscfw=0;
+char path[0x200]={0};
 
 const char *yellow="\x1b[33;1m";
 const char *blue="\x1b[34;1m";
@@ -16,6 +18,10 @@ const char *dblue="\x1b[34;0m";
 const char *white="\x1b[37;1m";
 
 Result menuhax67(){
+	if(iscfw){
+		printf("You already have cfw!\n");
+		return 0;
+	}
 	Result res=0;
 	u32 base_addr=0;  //0x3093d0
 	u8 region=0xff;
@@ -124,6 +130,7 @@ Result menuhax67(){
 
 Result uninstall(){
 	Result res;
+	Result res2;
 
 	res = CFG_GetConfigInfoBlk4(2, 0x50001, data);
 	data[1]=0x3;            //reverts brightness level to 3 (range 1-5)
@@ -140,6 +147,12 @@ Result uninstall(){
 	
 	res = CFG_UpdateConfigSavegame();
 	
+	if(iscfw){
+		strcat(path, "/Nintendo DSiWare/F00D43D5.bin");
+		res2 = remove(path);
+		if(!res2) printf("F00D43D5.bin removed\n");
+	}
+	
 	printf("done %08X\n", (int)res);
 	
 	return 0;
@@ -149,7 +162,7 @@ int cursor=0;
 int menu(u32 n){
 	consoleClear();
 	
-	printf("menuhax67_installer v1.0 - zoogie\n\n");
+	printf("menuhax67 installer v1.1 - zoogie\nSTATUS: %s\n\n", iscfw ? "cfw":"user");
 	printf("CAUTION: This will crank your brightness up to\nfull and erase parental controls\n\n");
 
 	char *choices[]={
@@ -201,17 +214,33 @@ int main(int argc, char* argv[])
 	Result res;
 	gfxInitDefault();
 	consoleInit(GFX_TOP, NULL);
+	u8 ctrpath[0x200]={0};
+	memset(ctrpath, 0, 0x200); //make damned sure this is safe
+	memset(path, 0, 0x200); 
 	
 	data=(u8*)malloc(0x10000);
 
 	cfguInit();
 	nsInit();
+	fsInit();
 	
 	res = CFG_GetConfigInfoBlk4(2, 0, data);
 	if(res){
 		printf("Error: cfg:s or cfg:i not available, abort\n");
 		while(1) svcSleepThread(17*1000*1000);
 	}
+	res = FSUSER_ExportIntegrityVerificationSeed((FS_IntegrityVerificationSeed*)(data+0x8000)); //data outputed is don't care, we're just testing for cfw. hax* userland would never be allowed to call this.
+	if(!res){
+		iscfw=1;
+		res = FSUSER_GetSdmcCtrRootPath(ctrpath, 0x80*2);
+		for(int i=0;i<0x180;i++){
+			path[i]=ctrpath[i*2];
+			if(!path[i]) break;
+		}
+	}
+	//printf("%08X\n",(int)res);
+	//printf("%s\n",(char*)path);
+	//printf("\n");
 	
 	menu(0);
 
