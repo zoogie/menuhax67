@@ -1,4 +1,3 @@
-REGION := USA
 ifeq ($(strip $(REGION)),)
 $(error "Set the REGION Makefile parameter.")
 endif
@@ -8,6 +7,9 @@ BASE_ADDR := 0
 
 ifeq ($(REGION),USA)
 	BASE_ADDR := 0x00346a10 
+endif
+ifeq ($(REGION),USA30)
+	BASE_ADDR := 0x00347a10
 endif
 ifeq ($(REGION),EUR)
 	BASE_ADDR := 0x00347a10

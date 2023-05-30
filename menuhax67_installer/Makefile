@@ -42,7 +42,7 @@ GFXBUILD	:=	$(BUILD)
 #GFXBUILD	:=	$(ROMFS)/gfx
 
 APP_TITLE		:= menuhax67_installer
-APP_DESCRIPTION		:= menuhax67_installer
+APP_DESCRIPTION		:= v1.2
 APP_AUTHOR		:= zoogie
 
 #---------------------------------------------------------------------------------

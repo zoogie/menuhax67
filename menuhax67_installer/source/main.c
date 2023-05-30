@@ -4,6 +4,7 @@
 #include <3ds.h>
 
 #include "rop_usa_bin.h"
+#include "rop_usa30_bin.h"
 #include "rop_eur_bin.h"
 #include "rop_jpn_bin.h"
 #include "rop_kor_bin.h"
@@ -19,8 +20,8 @@ const char *white="\x1b[37;1m";
 
 Result menuhax67(){
 	if(iscfw){
-		printf("You already have cfw!\n");
-		return 0;
+		printf("YOU ALREADY HAVE CFW!\n");
+		//return 0;
 	}
 	Result res=0;
 	u32 base_addr=0;  //0x3093d0
@@ -61,11 +62,17 @@ Result menuhax67(){
 		}
 	}
 	else if(region==1){
-		base_addr=0x00346a10;
-		memcpy(rop, rop_usa_bin, rop_usa_bin_size); 
-		printf("USA\n");
-		if(menuversion != 29){
-			printf("Error: unsupported menu r%d, expected r29\n", menuversion);
+		printf("USA r%d\n", menuversion);
+		if(menuversion == 29){
+			base_addr=0x00346a10;
+			memcpy(rop, rop_usa_bin, rop_usa_bin_size); 
+		}
+		else if(menuversion == 30){
+			base_addr=0x00347a10;
+			memcpy(rop, rop_usa30_bin, rop_usa30_bin_size); 
+		}
+		else{
+			printf("Error: unsupported menu r%d, expected r29/30\n", menuversion);
 			return 3;
 		}
 	}
@@ -123,7 +130,7 @@ Result menuhax67(){
 	res = CFG_SetConfigInfoBlk4(0xc0, 0xc0000, rop);//36857a10 08557a10
 	
 	res = CFG_UpdateConfigSavegame();  //note that this is the cfg:i version of this function, so it won't work with anything but mset
-	printf("done %08X\n", (int)res);   //easy workaround is to patch header 00 00 03 08 --> 00 00 03 04 in the binary (first occurrence)
+	printf("done %08X\n", (int)res);   //easy workaround is to patch header 00 00 03 08 --> 00 00 03 04 in the binary (first occurrence 2f50)
 	                                   //not really in the mood to make a local libctru or bother the libctru maintainers
 	return 0;
 }
@@ -162,7 +169,7 @@ int cursor=0;
 int menu(u32 n){
 	consoleClear();
 	
-	printf("menuhax67 installer v1.1 - zoogie\nSTATUS: %s\n\n", iscfw ? "cfw":"user");
+	printf("menuhax67 installer v1.2 - zoogie\nSTATUS: %s\n\n", iscfw ? "cfw":"user");
 	printf("CAUTION: This will crank your brightness up to\nfull and erase parental controls\n\n");
 
 	char *choices[]={
